@@ -4,7 +4,13 @@
 
   <!-- nodes -->
 
+<SEQUENCE EXIT-ON="FAILURE">
+  <COMMENT>=== 1. Date conversion ===</COMMENT>
+
+  <!-- nodes -->
+
 <INVOKE SERVICE="pub.date:dateTimeFormat" VALIDATE-IN="$none" VALIDATE-OUT="$none">
+  <COMMENT>An absent or malformed date is deliberately not guarded: the platform raises ISS.0086.9189, which the unit tests expect.</COMMENT>
 
   <!-- nodes -->
 
@@ -102,6 +108,172 @@
     <value name="form_qualified">false</value>
     <value name="is_global">false</value>
     <array name="rec_fields" type="record" depth="1">
+      <record javaclass="com.wm.util.Values">
+        <value name="node_type">record</value>
+        <value name="node_subtype">unknown</value>
+        <value name="is_public">false</value>
+        <value name="field_name">request</value>
+        <value name="field_type">record</value>
+        <value name="field_dim">0</value>
+        <value name="nillable">true</value>
+        <value name="form_qualified">false</value>
+        <value name="is_global">false</value>
+        <array name="rec_fields" type="record" depth="1">
+          <record javaclass="com.wm.util.Values">
+            <value name="node_type">record</value>
+            <value name="node_subtype">unknown</value>
+            <value name="is_public">false</value>
+            <value name="field_name">orderRequest</value>
+            <value name="field_type">record</value>
+            <value name="field_dim">0</value>
+            <value name="nillable">true</value>
+            <value name="form_qualified">false</value>
+            <value name="is_global">false</value>
+            <array name="rec_fields" type="record" depth="1">
+              <record javaclass="com.wm.util.Values">
+                <value name="node_type">record</value>
+                <value name="node_subtype">unknown</value>
+                <value name="is_public">false</value>
+                <value name="field_name">customer</value>
+                <value name="field_type">record</value>
+                <value name="field_dim">0</value>
+                <value name="nillable">true</value>
+                <value name="form_qualified">false</value>
+                <value name="is_global">false</value>
+                <array name="rec_fields" type="record" depth="1">
+                </array>
+                <value name="rec_closed">true</value>
+                <value name="modifiable">true</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <value name="node_type">record</value>
+                <value name="node_subtype">unknown</value>
+                <value name="is_public">false</value>
+                <value name="field_name">shippingAddress</value>
+                <value name="field_type">record</value>
+                <value name="field_dim">0</value>
+                <value name="nillable">true</value>
+                <value name="form_qualified">false</value>
+                <value name="is_global">false</value>
+                <array name="rec_fields" type="record" depth="1">
+                </array>
+                <value name="rec_closed">true</value>
+                <value name="modifiable">true</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <value name="node_type">record</value>
+                <value name="node_subtype">unknown</value>
+                <value name="is_public">false</value>
+                <value name="field_name">items</value>
+                <value name="field_type">record</value>
+                <value name="field_dim">0</value>
+                <value name="nillable">true</value>
+                <value name="form_qualified">false</value>
+                <value name="is_global">false</value>
+                <array name="rec_fields" type="record" depth="1">
+                </array>
+                <value name="rec_closed">true</value>
+                <value name="modifiable">true</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <value name="node_type">unknown</value>
+                <value name="node_subtype">unknown</value>
+                <value name="is_public">false</value>
+                <value name="field_name">id</value>
+                <value name="field_type">string</value>
+                <value name="field_dim">0</value>
+                <value name="nillable">true</value>
+                <value name="form_qualified">false</value>
+                <value name="is_global">false</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <value name="node_type">unknown</value>
+                <value name="node_subtype">unknown</value>
+                <value name="is_public">false</value>
+                <value name="field_name">date</value>
+                <value name="field_type">string</value>
+                <value name="field_dim">0</value>
+                <value name="nillable">true</value>
+                <value name="form_qualified">false</value>
+                <value name="is_global">false</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <value name="node_type">unknown</value>
+                <value name="node_subtype">unknown</value>
+                <value name="is_public">false</value>
+                <value name="field_name">currency</value>
+                <value name="field_type">string</value>
+                <value name="field_dim">0</value>
+                <value name="nillable">true</value>
+                <value name="form_qualified">false</value>
+                <value name="is_global">false</value>
+              </record>
+            </array>
+            <value name="rec_closed">true</value>
+            <value name="modifiable">true</value>
+          </record>
+        </array>
+        <value name="rec_closed">true</value>
+        <value name="modifiable">true</value>
+      </record>
+      <record javaclass="com.wm.util.Values">
+        <value name="node_type">record</value>
+        <value name="node_subtype">unknown</value>
+        <value name="is_public">false</value>
+        <value name="field_name">orderCanonical</value>
+        <value name="field_type">recref</value>
+        <value name="field_dim">0</value>
+        <value name="nillable">true</value>
+        <value name="form_qualified">false</value>
+        <value name="is_global">false</value>
+        <value name="rec_closed">true</value>
+        <value name="modifiable">true</value>
+        <value name="rec_ref">demoCanonicalDataFormats.docTypes:OrderCanonical</value>
+      </record>
+      <record javaclass="com.wm.util.Values">
+        <value name="node_type">field</value>
+        <value name="node_subtype">unknown</value>
+        <value name="is_public">false</value>
+        <value name="field_name">value</value>
+        <value name="field_type">string</value>
+        <value name="field_dim">0</value>
+        <value name="nillable">true</value>
+        <value name="form_qualified">false</value>
+        <value name="is_global">false</value>
+      </record>
+      <record javaclass="com.wm.util.Values">
+        <value name="node_type">record</value>
+        <value name="node_subtype">unknown</value>
+        <value name="is_public">false</value>
+        <value name="field_name">inString</value>
+        <value name="field_type">string</value>
+        <value name="field_dim">0</value>
+        <value name="nillable">true</value>
+        <value name="form_qualified">false</value>
+        <value name="is_global">false</value>
+      </record>
+      <record javaclass="com.wm.util.Values">
+        <value name="node_type">record</value>
+        <value name="node_subtype">unknown</value>
+        <value name="is_public">false</value>
+        <value name="field_name">currentPattern</value>
+        <value name="field_type">string</value>
+        <value name="field_dim">0</value>
+        <value name="nillable">true</value>
+        <value name="form_qualified">false</value>
+        <value name="is_global">false</value>
+      </record>
+      <record javaclass="com.wm.util.Values">
+        <value name="node_type">record</value>
+        <value name="node_subtype">unknown</value>
+        <value name="is_public">false</value>
+        <value name="field_name">newPattern</value>
+        <value name="field_type">string</value>
+        <value name="field_dim">0</value>
+        <value name="nillable">true</value>
+        <value name="form_qualified">false</value>
+        <value name="is_global">false</value>
+      </record>
     </array>
     <value name="modifiable">true</value>
   </record>
@@ -109,6 +281,9 @@
 </MAPSOURCE>
 
   <!-- nodes -->
+
+<MAPCOPY NAME="MapCopy" FROM="/request;2;0/orderRequest;2;0/date;1;0" TO="/inString;1;0">
+</MAPCOPY>
 
 <MAPSET NAME="MapSet" OVERWRITE="true" VARIABLES="false" GLOBALVARIABLES="false" FIELD="/currentPattern;1;0">
   <DATA ENCODING="XMLValues" I18N="true">
@@ -166,9 +341,23 @@
     <value name="is_global">false</value>
     <array name="rec_fields" type="record" depth="1">
       <record javaclass="com.wm.util.Values">
+        <value name="node_type">record</value>
         <value name="node_subtype">unknown</value>
         <value name="is_public">false</value>
-        <value name="field_name">formattedDate</value>
+        <value name="field_name">orderCanonical</value>
+        <value name="field_type">recref</value>
+        <value name="field_dim">0</value>
+        <value name="nillable">true</value>
+        <value name="form_qualified">false</value>
+        <value name="is_global">false</value>
+        <value name="rec_closed">true</value>
+        <value name="modifiable">true</value>
+        <value name="rec_ref">demoCanonicalDataFormats.docTypes:OrderCanonical</value>
+      </record>
+      <record javaclass="com.wm.util.Values">
+        <value name="node_subtype">unknown</value>
+        <value name="is_public">false</value>
+        <value name="field_name">convertedDate</value>
         <value name="field_type">string</value>
         <value name="field_dim">0</value>
         <value name="nillable">true</value>
@@ -213,7 +402,7 @@
 
   <!-- nodes -->
 
-<MAPCOPY NAME="MapCopy" FROM="/value;1;0" TO="/formattedDate;1;0">
+<MAPCOPY NAME="MapCopy" FROM="/value;1;0" TO="/convertedDate;1;0">
 </MAPCOPY>
 
 <MAPDELETE FIELD="currentPattern;1;0">
@@ -229,6 +418,12 @@
 </MAPDELETE>
 </MAP>
 </INVOKE>
+</SEQUENCE>
+
+<SEQUENCE EXIT-ON="FAILURE">
+  <COMMENT>=== 2. Mapping to OrderCanonical ===</COMMENT>
+
+  <!-- nodes -->
 
 <MAP MODE="STANDALONE">
   <MAPTARGET>
@@ -245,9 +440,23 @@
     <value name="is_global">false</value>
     <array name="rec_fields" type="record" depth="1">
       <record javaclass="com.wm.util.Values">
+        <value name="node_type">record</value>
         <value name="node_subtype">unknown</value>
         <value name="is_public">false</value>
-        <value name="field_name">formattedDate</value>
+        <value name="field_name">orderCanonical</value>
+        <value name="field_type">recref</value>
+        <value name="field_dim">0</value>
+        <value name="nillable">true</value>
+        <value name="form_qualified">false</value>
+        <value name="is_global">false</value>
+        <value name="rec_closed">true</value>
+        <value name="modifiable">true</value>
+        <value name="rec_ref">demoCanonicalDataFormats.docTypes:OrderCanonical</value>
+      </record>
+      <record javaclass="com.wm.util.Values">
+        <value name="node_subtype">unknown</value>
+        <value name="is_public">false</value>
+        <value name="field_name">convertedDate</value>
         <value name="field_type">string</value>
         <value name="field_dim">0</value>
         <value name="nillable">true</value>
@@ -272,6 +481,31 @@
     <value name="form_qualified">false</value>
     <value name="is_global">false</value>
     <array name="rec_fields" type="record" depth="1">
+      <record javaclass="com.wm.util.Values">
+        <value name="node_type">record</value>
+        <value name="node_subtype">unknown</value>
+        <value name="is_public">false</value>
+        <value name="field_name">orderCanonical</value>
+        <value name="field_type">recref</value>
+        <value name="field_dim">0</value>
+        <value name="nillable">true</value>
+        <value name="form_qualified">false</value>
+        <value name="is_global">false</value>
+        <value name="rec_closed">true</value>
+        <value name="modifiable">true</value>
+        <value name="rec_ref">demoCanonicalDataFormats.docTypes:OrderCanonical</value>
+      </record>
+      <record javaclass="com.wm.util.Values">
+        <value name="node_type">unknown</value>
+        <value name="node_subtype">unknown</value>
+        <value name="is_public">false</value>
+        <value name="field_name">inString</value>
+        <value name="field_type">string</value>
+        <value name="field_dim">0</value>
+        <value name="nillable">true</value>
+        <value name="form_qualified">false</value>
+        <value name="is_global">false</value>
+      </record>
       <record javaclass="com.wm.util.Values">
         <value name="node_type">unknown</value>
         <value name="node_subtype">unknown</value>
@@ -306,33 +540,9 @@
         <value name="is_global">false</value>
       </record>
       <record javaclass="com.wm.util.Values">
-        <value name="node_type">unknown</value>
         <value name="node_subtype">unknown</value>
         <value name="is_public">false</value>
-        <value name="field_name">inString</value>
-        <value name="field_type">string</value>
-        <value name="field_dim">0</value>
-        <value name="nillable">true</value>
-        <value name="form_qualified">false</value>
-        <value name="is_global">false</value>
-      </record>
-      <record javaclass="com.wm.util.Values">
-        <value name="node_type">record</value>
-        <value name="node_subtype">unknown</value>
-        <value name="is_public">false</value>
-        <value name="field_name">orderCanonical</value>
-        <value name="field_type">recref</value>
-        <value name="field_dim">0</value>
-        <value name="nillable">true</value>
-        <value name="form_qualified">false</value>
-        <value name="is_global">false</value>
-        <value name="modifiable">true</value>
-        <value name="rec_ref">demoCanonicalDataFormats.docTypes:OrderCanonical</value>
-      </record>
-      <record javaclass="com.wm.util.Values">
-        <value name="node_subtype">unknown</value>
-        <value name="is_public">false</value>
-        <value name="field_name">formattedDate</value>
+        <value name="field_name">convertedDate</value>
         <value name="field_type">string</value>
         <value name="field_dim">0</value>
         <value name="nillable">true</value>
@@ -347,7 +557,10 @@
 
   <!-- nodes -->
 
-<MAPCOPY NAME="MapCopy" FROM="/formattedDate;1;0" TO="/orderCanonical;4;0;demoCanonicalDataFormats.docTypes:OrderCanonical/date;1;0">
+<MAPCOPY NAME="MapCopy" FROM="/request;2;0/orderRequest;2;0/id;1;0" TO="/orderCanonical;4;0;demoCanonicalDataFormats.docTypes:OrderCanonical/id;1;0">
+</MAPCOPY>
+
+<MAPCOPY NAME="MapCopy" FROM="/convertedDate;1;0" TO="/orderCanonical;4;0;demoCanonicalDataFormats.docTypes:OrderCanonical/date;1;0">
 </MAPCOPY>
 
 <MAPSET NAME="MapSet" OVERWRITE="true" VARIABLES="false" GLOBALVARIABLES="false" FIELD="/orderCanonical;4;0;demoCanonicalDataFormats.docTypes:OrderCanonical/status;1;0">
@@ -378,19 +591,23 @@
 </DATA>
 </MAPSET>
 
+<MAPCOPY NAME="MapCopy" FROM="/request;2;0/orderRequest;2;0/currency;1;0" TO="/orderCanonical;4;0;demoCanonicalDataFormats.docTypes:OrderCanonical/currency;1;0">
+</MAPCOPY>
+
 <MAPCOPY NAME="MapCopy" FROM="/request;2;0/orderRequest;2;0/customer;2;0" TO="/orderCanonical;4;0;demoCanonicalDataFormats.docTypes:OrderCanonical/customer;2;0">
 </MAPCOPY>
 
 <MAPCOPY NAME="MapCopy" FROM="/request;2;0/orderRequest;2;0/shippingAddress;2;0" TO="/orderCanonical;4;0;demoCanonicalDataFormats.docTypes:OrderCanonical/shippingAddress;2;0">
 </MAPCOPY>
 
-<MAPCOPY NAME="MapCopy" FROM="/request;2;0/orderRequest;2;0/items;2;0/item;2;0" TO="/orderCanonical;4;0;demoCanonicalDataFormats.docTypes:OrderCanonical/items;2;1">
+<MAPCOPY NAME="MapCopy" FROM="/request;2;0/orderRequest;2;0/items;2;0/item;2;1" TO="/orderCanonical;4;0;demoCanonicalDataFormats.docTypes:OrderCanonical/items;2;1">
 </MAPCOPY>
 
-<MAPDELETE FIELD="formattedDate;1;0">
+<MAPDELETE FIELD="convertedDate;1;0">
 </MAPDELETE>
 
 <MAPDELETE FIELD="request;2;0">
 </MAPDELETE>
 </MAP>
+</SEQUENCE>
 </FLOW>

@@ -1,7 +1,39 @@
 interface partner1orders.services
 service mapCanonicalOrder (
+    input {
+        record request {
+            record orderRequest {
+                String id;
+                String date;
+                String currency;
+                record customer {
+                    String id;
+                    String name;
+                    String email;
+                };
+                record shippingAddress {
+                    String street;
+                    String city;
+                    String postalCode;
+                    String country;
+                };
+                record items {
+                    recordList item {
+                        String id;
+                        String name;
+                        String quantity;
+                        String unitPrice;
+                    };
+                };
+            };
+        };
+    }
+    output {
+        record orderCanonical (demoCanonicalDataFormats.docTypes:OrderCanonical);
+    }
 )
 properties {
+    comment: "Maps a Partner 1 order (request/orderRequest) to the OrderCanonical format: date converted to yyyy-MM-dd HH:mm:ss.SSS, status fixed to received, other fields copied as is.";
     visible: private;
     reuse: private;
     stateless: true;
@@ -19,51 +51,92 @@ properties {
     validateOutput: false;
 }
 {
-    INVOKE pub.date:dateTimeFormat {
-        validateInput: false
-        validateOutput: false
-        input {
-            mapTarget {
-                String currentPattern;
-                String newPattern;
+    SEQUENCE {
+        comment: "=== 1. Date conversion ==="
+        INVOKE pub.date:dateTimeFormat {
+            comment: "An absent or malformed date is deliberately not guarded: the platform raises ISS.0086.9189, which the unit tests expect."
+            validateInput: false
+            validateOutput: false
+            input {
+                mapSource {
+                    record request {
+                        record orderRequest {
+                            record customer;
+                            record shippingAddress;
+                            record items;
+                            String id;
+                            String date;
+                            String currency;
+                        };
+                    };
+                }
+                mapTarget {
+                    String inString;
+                    String currentPattern;
+                    String newPattern;
+                }
+                copy `request/orderRequest/date` -> inString;
+                set `currentPattern` = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+                set `newPattern` = "yyyy-MM-dd HH:mm:ss.SSS";
             }
-            set `currentPattern` = "yyyy-MM-dd'T'HH:mm:ss.SSS";
-            set `newPattern` = "yyyy-MM-dd HH:mm:ss.SSS";
-        }
-        output {
-            mapSource {
-                String value;
+            output {
+                mapSource {
+                    String value;
+                }
+                mapTarget {
+                    String convertedDate;
+                }
+                copy value -> convertedDate;
+                drop `currentPattern`;
+                drop `inString`;
+                drop `newPattern`;
+                drop `value`;
             }
-            mapTarget {
-                String formattedDate;
-            }
-            copy value -> formattedDate;
-            drop `currentPattern`;
-            drop `inString`;
-            drop `newPattern`;
-            drop `value`;
         }
     }
-    MAP {
-        mapSource {
-            String formattedDate;
-            record request;
+    SEQUENCE {
+        comment: "=== 2. Mapping to OrderCanonical ==="
+        MAP {
+            mapSource {
+                record request;
+                String convertedDate;
+            }
+            mapTarget {
+                record orderCanonical (demoCanonicalDataFormats.docTypes:OrderCanonical) {
+                    String id;
+                    String date;
+                    String status;
+                    record customer {
+                        allowUnspecifiedFields: true;
+                    } {
+                        String id;
+                        String name;
+                        String email;
+                    };
+                    recordList items {
+                        String id;
+                        String name;
+                        String quantity;
+                        String unitPrice;
+                    };
+                    record shippingAddress {
+                        String street;
+                        String city;
+                        String postalCode;
+                        String country;
+                    };
+                    String currency;
+                };
+            }
+            copy `request/orderRequest/id` -> `orderCanonical/id`;
+            copy convertedDate -> `orderCanonical/date`;
+            set `orderCanonical/status` = "received";
+            copy `request/orderRequest/currency` -> `orderCanonical/currency`;
+            copy `request/orderRequest/customer` -> `orderCanonical/customer`;
+            copy `request/orderRequest/shippingAddress` -> `orderCanonical/shippingAddress`;
+            copy `request/orderRequest/items/item` -> `orderCanonical/items`;
+            drop `convertedDate`;
+            drop `request`;
         }
-        mapTarget {
-            record orderCanonical {
-                String date;
-                String status;
-                record customer;
-                record shippingAddress;
-                recordList items;
-            };
-        }
-        copy formattedDate -> `orderCanonical/date`;
-        set `orderCanonical/status` = "received";
-        copy `request/orderRequest/customer` -> `orderCanonical/customer`;
-        copy `request/orderRequest/shippingAddress` -> `orderCanonical/shippingAddress`;
-        copy `request/orderRequest/items/item` -> `orderCanonical/items`;
-        drop `formattedDate`;
-        drop `request`;
     }
 }

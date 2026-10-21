@@ -1,7 +1,11 @@
 interface partner1orders.services
 service receiveOrderMessage (
+    input {
+        record JMSMessage (pub.jms:JMSMessage);
+    }
 )
 properties {
+    comment: "JMS trigger service for /orders/partner1: parses the Partner 1 XML order from the message body, maps it to OrderCanonical and sends it as an IData to /orders/requests.";
     visible: private;
     reuse: private;
     stateless: true;
@@ -15,120 +19,298 @@ properties {
     enableAuditing: never;
     logOn: Error only;
     includePipeline: never;
+    specificationReference: "pub.jms:triggerSpec";
     validateInput: false;
     validateOutput: false;
 }
 {
-    INVOKE pub.flow:debugLog {
-        validateInput: false
-        validateOutput: false
-        input {
-            mapTarget {
-                String function;
-                String level;
+    SEQUENCE {
+        comment: "=== 1. Read and parse the XML payload ==="
+        INVOKE pub.flow:debugLog {
+            validateInput: false
+            validateOutput: false
+            input {
+                mapSource {
+                    record JMSMessage (pub.jms:JMSMessage) {
+                        record header {
+                            required: false;
+                            allowUnspecifiedFields: true;
+                        } {
+                            String JMSCorrelationID {
+                                required: false;
+                            };
+                            Integer JMSDeliveryMode {
+                                required: false;
+                            };
+                            Object JMSDestination {
+                                required: false;
+                            };
+                            Long JMSExpiration {
+                                required: false;
+                            };
+                            String JMSMessageID {
+                                required: false;
+                            };
+                            Integer JMSPriority {
+                                required: false;
+                            };
+                            Boolean JMSRedelivered {
+                                required: false;
+                            };
+                            Object JMSReplyTo {
+                                required: false;
+                            };
+                            Long JMSTimestamp {
+                                required: false;
+                            };
+                            String JMSType {
+                                required: false;
+                            };
+                        };
+                        record `properties` {
+                            required: false;
+                            allowUnspecifiedFields: true;
+                        } {
+                            Integer JMSXDeliveryCount {
+                                required: false;
+                            };
+                            String JMS_WMClusterNodes {
+                                required: false;
+                            };
+                            String activation {
+                                required: false;
+                            };
+                            String uuid {
+                                required: false;
+                            };
+                        };
+                        record body {
+                            required: false;
+                            allowUnspecifiedFields: true;
+                        } {
+                            String string {
+                                required: false;
+                            };
+                            Byte[] bytes {
+                                required: false;
+                            };
+                            Object object {
+                                required: false;
+                            };
+                            record data {
+                                required: false;
+                                allowUnspecifiedFields: true;
+                            };
+                            Object message {
+                                required: false;
+                            };
+                        };
+                    };
+                }
+                mapTarget {
+                    String function;
+                    String level;
+                    String message;
+                }
+                set `function` = "partner1orders:receiveOrderMessage";
+                set `level` = "Info";
+                copy `JMSMessage/body/string` -> message;
             }
-            set `function` = "partner1orders:receiveOrderMessage";
-            set `level` = "Info";
-        }
-        output {
-            drop `message`;
-            drop `function`;
-            drop `level`;
-        }
-    }
-    INVOKE pub.xml:xmlStringToEnhancedXMLNode {
-        validateInput: false
-        validateOutput: false
-        output {
-            drop `xmldata`;
-            drop `JMSMessage`;
-        }
-    }
-    INVOKE pub.xml:xmlNodeToDocument {
-        validateInput: false
-        validateOutput: false
-        output {
-            mapSource {
-                record document {
-                    allowUnspecifiedFields: true;
-                };
+            output {
+                drop `message`;
+                drop `function`;
+                drop `level`;
             }
-            mapTarget {
-                record request {
-                    allowUnspecifiedFields: true;
-                };
-            }
-            copy document -> request;
-            drop `node`;
-            drop `document`;
         }
-    }
-    INVOKE partner1orders.services:mapCanonicalOrder {
-        validateInput: false
-        validateOutput: false
-        output {
-            drop `request`;
-        }
-    }
-    INVOKE pub.jms:send {
-        validateInput: false
-        validateOutput: false
-        input {
-            mapSource {
-                record orderCanonical {
-                    allowUnspecifiedFields: true;
-                };
+        INVOKE pub.xml:xmlStringToEnhancedXMLNode {
+            comment: "The partner sends the XML as the text of the JMS message, so the body string is the XML to parse. JMSMessage is dropped here so that it does not collide with the message built for the send."
+            validateInput: false
+            validateOutput: false
+            input {
+                mapSource {
+                    record JMSMessage (pub.jms:JMSMessage) {
+                        record header {
+                            required: false;
+                            allowUnspecifiedFields: true;
+                        } {
+                            String JMSCorrelationID {
+                                required: false;
+                            };
+                            Integer JMSDeliveryMode {
+                                required: false;
+                            };
+                            Object JMSDestination {
+                                required: false;
+                            };
+                            Long JMSExpiration {
+                                required: false;
+                            };
+                            String JMSMessageID {
+                                required: false;
+                            };
+                            Integer JMSPriority {
+                                required: false;
+                            };
+                            Boolean JMSRedelivered {
+                                required: false;
+                            };
+                            Object JMSReplyTo {
+                                required: false;
+                            };
+                            Long JMSTimestamp {
+                                required: false;
+                            };
+                            String JMSType {
+                                required: false;
+                            };
+                        };
+                        record `properties` {
+                            required: false;
+                            allowUnspecifiedFields: true;
+                        } {
+                            Integer JMSXDeliveryCount {
+                                required: false;
+                            };
+                            String JMS_WMClusterNodes {
+                                required: false;
+                            };
+                            String activation {
+                                required: false;
+                            };
+                            String uuid {
+                                required: false;
+                            };
+                        };
+                        record body {
+                            required: false;
+                            allowUnspecifiedFields: true;
+                        } {
+                            String string {
+                                required: false;
+                            };
+                            Byte[] bytes {
+                                required: false;
+                            };
+                            Object object {
+                                required: false;
+                            };
+                            record data {
+                                required: false;
+                                allowUnspecifiedFields: true;
+                            };
+                            Object message {
+                                required: false;
+                            };
+                        };
+                    };
+                }
+                mapTarget {
+                    String xmldata;
+                }
+                copy `JMSMessage/body/string` -> xmldata;
             }
-            mapTarget {
-                String connectionAliasName;
-                String destinationName;
-                String destinationType;
-                record JMSMessage {
-                    allowUnspecifiedFields: true;
-                } {
-                    record header {
-                        required: false;
+            output {
+                drop `xmldata`;
+                drop `JMSMessage`;
+            }
+        }
+        INVOKE pub.xml:xmlNodeToDocument {
+            comment: "item is forced to a list: with a single item in the order the parser would otherwise produce a record, and the copy to the items list would be lost."
+            validateInput: false
+            validateOutput: false
+            input {
+                mapTarget {
+                    String[] arrays;
+                }
+                set `arrays` = ["item"];
+            }
+            output {
+                mapSource {
+                    record document {
                         allowUnspecifiedFields: true;
                     };
-                    record `properties` {
-                        required: false;
+                }
+                mapTarget {
+                    record request {
                         allowUnspecifiedFields: true;
                     };
-                    record body {
-                        required: false;
+                }
+                copy document -> request;
+                drop `node`;
+                drop `document`;
+                drop `arrays`;
+            }
+        }
+    }
+    SEQUENCE {
+        comment: "=== 2. Map to the canonical order ==="
+        INVOKE partner1orders.services:mapCanonicalOrder {
+            validateInput: false
+            validateOutput: false
+        }
+    }
+    SEQUENCE {
+        comment: "=== 3. Send the canonical order to /orders/requests ==="
+        INVOKE pub.jms:send {
+            comment: "The consumer (demoOrderManagement) is another Integration Server service, so the canonical order is sent as an IData in body/data."
+            validateInput: false
+            validateOutput: false
+            input {
+                mapSource {
+                    record orderCanonical {
+                        allowUnspecifiedFields: true;
+                    };
+                }
+                mapTarget {
+                    String connectionAliasName;
+                    String destinationName;
+                    String destinationType;
+                    record JMSMessage {
                         allowUnspecifiedFields: true;
                     } {
-                        String string {
-                            required: false;
-                        };
-                        Byte[] bytes {
-                            required: false;
-                        };
-                        Object object {
-                            required: false;
-                        };
-                        record data {
+                        record header {
                             required: false;
                             allowUnspecifiedFields: true;
                         };
-                        Object message {
+                        record `properties` {
                             required: false;
+                            allowUnspecifiedFields: true;
+                        };
+                        record body {
+                            required: false;
+                            allowUnspecifiedFields: true;
+                        } {
+                            String string {
+                                required: false;
+                            };
+                            Byte[] bytes {
+                                required: false;
+                            };
+                            Object object {
+                                required: false;
+                            };
+                            record data {
+                                required: false;
+                                allowUnspecifiedFields: true;
+                            };
+                            Object message {
+                                required: false;
+                            };
                         };
                     };
-                };
+                }
+                set `connectionAliasName` = "DEFAULT_IS_JMS_CONNECTION";
+                set `destinationName` = "/orders/requests";
+                set `destinationType` = "QUEUE";
+                copy orderCanonical -> `JMSMessage/body/data`;
             }
-            set `connectionAliasName` = "DEFAULT_IS_JMS_CONNECTION";
-            set `destinationName` = "/orders/requests";
-            set `destinationType` = "QUEUE";
-            copy orderCanonical -> `JMSMessage/body/data`;
-        }
-        output {
-            drop `orderCanonical`;
-            drop `connectionAliasName`;
-            drop `destinationName`;
-            drop `destinationType`;
-            drop `JMSMessage`;
-            drop `msgId`;
+            output {
+                drop `orderCanonical`;
+                drop `connectionAliasName`;
+                drop `destinationName`;
+                drop `destinationType`;
+                drop `JMSMessage`;
+            }
         }
     }
 }

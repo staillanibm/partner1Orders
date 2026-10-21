@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<IDataXMLCoder version="1.0">
+  <record javaclass="com.wm.data.ISMemDataImpl">
+    <record name="request" javaclass="com.wm.data.ISMemDataImpl">
+      <record name="orderRequest" javaclass="com.wm.data.ISMemDataImpl">
+        <value name="currency">EUR</value>
+        <record name="customer" javaclass="com.wm.data.ISMemDataImpl">
+          <value name="email">jdoe@company.com</value>
+          <value name="id">CUST-123</value>
+          <value name="name">John Doe</value>
+        </record>
+        <value name="date">2026-10-03T10:00:00.000</value>
+        <value name="id">ORD-00001</value>
+        <record name="items" javaclass="com.wm.data.ISMemDataImpl">
+          <array name="item" type="record" depth="1">
+            <record javaclass="com.wm.data.ISMemDataImpl">
+              <value name="id">ITEM-001</value>
+              <value name="name">T-Shirt</value>
+              <value name="quantity">2</value>
+              <value name="unitPrice">29.99</value>
+            </record>
+            <record javaclass="com.wm.data.ISMemDataImpl">
+              <value name="id">ITEM-045</value>
+              <value name="name">Socks</value>
+              <value name="quantity">1</value>
+              <value name="unitPrice">19.99</value>
+            </record>
+          </array>
+        </record>
+        <record name="shippingAddress" javaclass="com.wm.data.ISMemDataImpl">
+          <value name="city">Paris</value>
+          <value name="country">FR</value>
+          <value name="postalCode">75001</value>
+          <value name="street">1 Main</value>
+        </record>
+      </record>
+    </record>
+  </record>
+</IDataXMLCoder>

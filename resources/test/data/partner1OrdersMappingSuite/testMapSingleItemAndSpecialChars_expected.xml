@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<IDataXMLCoder version="1.0">
+  <record javaclass="com.wm.data.ISMemDataImpl">
+    <record name="orderCanonical" javaclass="com.wm.data.ISMemDataImpl">
+      <value name="currency">EUR</value>
+      <record name="customer" javaclass="com.wm.data.ISMemDataImpl">
+        <value name="email">ezola@paris.fr</value>
+        <value name="id">CUST-01</value>
+        <value name="name">Émile Zola &amp; Cie</value>
+      </record>
+      <value name="date">2026-10-03 10:00:00.000</value>
+      <value name="id">ORD-SINGLE</value>
+      <array name="items" type="record" depth="1">
+        <record javaclass="com.wm.data.ISMemDataImpl">
+          <value name="id">ITEM-1</value>
+          <value name="name">Book</value>
+          <value name="quantity">1</value>
+          <value name="unitPrice">15.50</value>
+        </record>
+      </array>
+      <record name="shippingAddress" javaclass="com.wm.data.ISMemDataImpl">
+        <value name="city">Lyon</value>
+        <value name="country">FR</value>
+        <value name="postalCode">69001</value>
+        <value name="street">12 Rue de l'Église</value>
+      </record>
+      <value name="status">received</value>
+    </record>
+  </record>
+</IDataXMLCoder>

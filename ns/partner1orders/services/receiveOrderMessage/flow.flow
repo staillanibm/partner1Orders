@@ -1,0 +1,134 @@
+interface partner1orders.services
+service receiveOrderMessage (
+)
+properties {
+    visible: private;
+    reuse: private;
+    stateless: true;
+    cacheResults: false;
+    cacheExpire: 15;
+    prefetch: false;
+    prefetchActivation: 1;
+    allowedHttpMethods: [TRACE, HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH];
+    maxRetryAttempts: 0;
+    retryInterval: 0;
+    enableAuditing: never;
+    logOn: Error only;
+    includePipeline: never;
+    validateInput: false;
+    validateOutput: false;
+}
+{
+    INVOKE pub.flow:debugLog {
+        validateInput: false
+        validateOutput: false
+        input {
+            mapTarget {
+                String function;
+                String level;
+            }
+            set `function` = "partner1orders:receiveOrderMessage";
+            set `level` = "Info";
+        }
+        output {
+            drop `message`;
+            drop `function`;
+            drop `level`;
+        }
+    }
+    INVOKE pub.xml:xmlStringToEnhancedXMLNode {
+        validateInput: false
+        validateOutput: false
+        output {
+            drop `xmldata`;
+            drop `JMSMessage`;
+        }
+    }
+    INVOKE pub.xml:xmlNodeToDocument {
+        validateInput: false
+        validateOutput: false
+        output {
+            mapSource {
+                record document {
+                    allowUnspecifiedFields: true;
+                };
+            }
+            mapTarget {
+                record request {
+                    allowUnspecifiedFields: true;
+                };
+            }
+            copy document -> request;
+            drop `node`;
+            drop `document`;
+        }
+    }
+    INVOKE partner1orders.services:mapCanonicalOrder {
+        validateInput: false
+        validateOutput: false
+        output {
+            drop `request`;
+        }
+    }
+    INVOKE pub.jms:send {
+        validateInput: false
+        validateOutput: false
+        input {
+            mapSource {
+                record orderCanonical {
+                    allowUnspecifiedFields: true;
+                };
+            }
+            mapTarget {
+                String connectionAliasName;
+                String destinationName;
+                String destinationType;
+                record JMSMessage {
+                    allowUnspecifiedFields: true;
+                } {
+                    record header {
+                        required: false;
+                        allowUnspecifiedFields: true;
+                    };
+                    record `properties` {
+                        required: false;
+                        allowUnspecifiedFields: true;
+                    };
+                    record body {
+                        required: false;
+                        allowUnspecifiedFields: true;
+                    } {
+                        String string {
+                            required: false;
+                        };
+                        Byte[] bytes {
+                            required: false;
+                        };
+                        Object object {
+                            required: false;
+                        };
+                        record data {
+                            required: false;
+                            allowUnspecifiedFields: true;
+                        };
+                        Object message {
+                            required: false;
+                        };
+                    };
+                };
+            }
+            set `connectionAliasName` = "DEFAULT_IS_JMS_CONNECTION";
+            set `destinationName` = "/orders/requests";
+            set `destinationType` = "QUEUE";
+            copy orderCanonical -> `JMSMessage/body/data`;
+        }
+        output {
+            drop `orderCanonical`;
+            drop `connectionAliasName`;
+            drop `destinationName`;
+            drop `destinationType`;
+            drop `JMSMessage`;
+            drop `msgId`;
+        }
+    }
+}

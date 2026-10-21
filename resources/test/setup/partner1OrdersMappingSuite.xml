@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webMethodsTestSuite name="partner1OrdersMappingSuite" description="Comprehensive unit tests for partner1orders mapping service">
+    <webMethodsTestCase description="Verifies standard mapping of Partner 1 XML order structure to canonical format" name="testMapCanonicalOrderSuccess">
+        <service folder="partner1orders.services" name="mapCanonicalOrder">
+            <input>
+                <file filename="resources/test/data/partner1OrdersMappingSuite/testMapCanonicalOrderSuccess_input.xml"/>
+            </input>
+            <expected>
+                <file filename="resources/test/data/partner1OrdersMappingSuite/testMapCanonicalOrderSuccess_expected.xml"/>
+            </expected>
+        </service>
+    </webMethodsTestCase>
+    <webMethodsTestCase description="Verifies mapping with single item array, special characters and accents in customer name and street" name="testMapSingleItemAndSpecialChars">
+        <service folder="partner1orders.services" name="mapCanonicalOrder">
+            <input>
+                <file filename="resources/test/data/partner1OrdersMappingSuite/testMapSingleItemAndSpecialChars_input.xml"/>
+            </input>
+            <expected>
+                <file filename="resources/test/data/partner1OrdersMappingSuite/testMapSingleItemAndSpecialChars_expected.xml"/>
+            </expected>
+        </service>
+    </webMethodsTestCase>
+    <webMethodsTestCase description="Verifies specific canonical field mappings and defaults via JXPath expressions" name="testMapFieldAssertions">
+        <service folder="partner1orders.services" name="mapCanonicalOrder">
+            <input>
+                <file filename="resources/test/data/partner1OrdersMappingSuite/testMapFieldAssertions_input.xml"/>
+            </input>
+            <expected>
+                <file/>
+                <field path="/orderCanonical/id" operator="==" value="ORD-FIELDS"/>
+                <field path="/orderCanonical/status" operator="==" value="received"/>
+                <field path="/orderCanonical/date" operator="==" value="2026-12-25 18:30:00.000"/>
+                <field path="/orderCanonical/currency" operator="==" value="USD"/>
+                <field path="/orderCanonical/customer/id" operator="==" value="CUST-999"/>
+            </expected>
+        </service>
+    </webMethodsTestCase>
+    <webMethodsTestCase description="Verifies that an invalid date pattern produces a ServiceException" name="testRejectInvalidDateFormat">
+        <service folder="partner1orders.services" name="mapCanonicalOrder">
+            <input>
+                <file filename="resources/test/data/partner1OrdersMappingSuite/testRejectInvalidDateFormat_input.xml"/>
+            </input>
+            <expected>
+                <exception class="com.wm.app.b2b.server.ServiceException" message="ISS.0086.9189"/>
+            </expected>
+        </service>
+    </webMethodsTestCase>
+    <webMethodsTestCase description="Verifies that a missing date input produces a ServiceException" name="testRejectMissingDate">
+        <service folder="partner1orders.services" name="mapCanonicalOrder">
+            <input>
+                <file filename="resources/test/data/partner1OrdersMappingSuite/testRejectMissingDate_input.xml"/>
+            </input>
+            <expected>
+                <exception class="com.wm.app.b2b.server.ServiceException" message="ISS.0086.9189"/>
+            </expected>
+        </service>
+    </webMethodsTestCase>
+    <webMethodsTestCase description="Verifies that an empty input payload produces a ServiceException" name="testRejectEmptyPayload">
+        <service folder="partner1orders.services" name="mapCanonicalOrder">
+            <input>
+                <file filename="resources/test/data/partner1OrdersMappingSuite/testRejectEmptyPayload_input.xml"/>
+            </input>
+            <expected>
+                <exception class="com.wm.app.b2b.server.ServiceException" message="ISS.0086.9189"/>
+            </expected>
+        </service>
+    </webMethodsTestCase>
+</webMethodsTestSuite>

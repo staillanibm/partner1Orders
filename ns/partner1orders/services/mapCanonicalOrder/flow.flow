@@ -1,0 +1,69 @@
+interface partner1orders.services
+service mapCanonicalOrder (
+)
+properties {
+    visible: private;
+    reuse: private;
+    stateless: true;
+    cacheResults: false;
+    cacheExpire: 15;
+    prefetch: false;
+    prefetchActivation: 1;
+    allowedHttpMethods: [TRACE, HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH];
+    maxRetryAttempts: 0;
+    retryInterval: 0;
+    enableAuditing: never;
+    logOn: Error only;
+    includePipeline: never;
+    validateInput: false;
+    validateOutput: false;
+}
+{
+    INVOKE pub.date:dateTimeFormat {
+        validateInput: false
+        validateOutput: false
+        input {
+            mapTarget {
+                String currentPattern;
+                String newPattern;
+            }
+            set `currentPattern` = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+            set `newPattern` = "yyyy-MM-dd HH:mm:ss.SSS";
+        }
+        output {
+            mapSource {
+                String value;
+            }
+            mapTarget {
+                String formattedDate;
+            }
+            copy value -> formattedDate;
+            drop `currentPattern`;
+            drop `inString`;
+            drop `newPattern`;
+            drop `value`;
+        }
+    }
+    MAP {
+        mapSource {
+            String formattedDate;
+            record request;
+        }
+        mapTarget {
+            record orderCanonical {
+                String date;
+                String status;
+                record customer;
+                record shippingAddress;
+                recordList items;
+            };
+        }
+        copy formattedDate -> `orderCanonical/date`;
+        set `orderCanonical/status` = "received";
+        copy `request/orderRequest/customer` -> `orderCanonical/customer`;
+        copy `request/orderRequest/shippingAddress` -> `orderCanonical/shippingAddress`;
+        copy `request/orderRequest/items/item` -> `orderCanonical/items`;
+        drop `formattedDate`;
+        drop `request`;
+    }
+}

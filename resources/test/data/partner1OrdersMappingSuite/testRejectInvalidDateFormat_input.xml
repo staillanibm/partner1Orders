@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<IDataXMLCoder version="1.0">
+  <record javaclass="com.wm.data.ISMemDataImpl">
+    <record name="request" javaclass="com.wm.data.ISMemDataImpl">
+      <record name="orderRequest" javaclass="com.wm.data.ISMemDataImpl">
+        <value name="currency">EUR</value>
+        <record name="customer" javaclass="com.wm.data.ISMemDataImpl">
+          <value name="email">test@test.com</value>
+          <value name="id">CUST-01</value>
+          <value name="name">Test</value>
+        </record>
+        <value name="date">2026-10-03</value>
+        <value name="id">ORD-BAD-DATE</value>
+        <record name="items" javaclass="com.wm.data.ISMemDataImpl">
+          <array name="item" type="record" depth="1">
+            <record javaclass="com.wm.data.ISMemDataImpl">
+              <value name="id">ITEM-1</value>
+              <value name="name">Item</value>
+              <value name="quantity">1</value>
+              <value name="unitPrice">10</value>
+            </record>
+          </array>
+        </record>
+        <record name="shippingAddress" javaclass="com.wm.data.ISMemDataImpl">
+          <value name="city">City</value>
+          <value name="country">FR</value>
+          <value name="postalCode">12345</value>
+          <value name="street">Street</value>
+        </record>
+      </record>
+    </record>
+  </record>
+</IDataXMLCoder>
